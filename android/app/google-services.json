@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "771994201913",
-    "project_id": "book-library-bab1e",
-    "storage_bucket": "book-library-bab1e.firebasestorage.app"
+    "project_number": "702958944935",
+    "project_id": "booklibary-1849f",
+    "storage_bucket": "booklibary-1849f.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:771994201913:android:2584b626b1589ed35002e8",
+        "mobilesdk_app_id": "1:702958944935:android:cdcf761a4374dcb9535182",
         "android_client_info": {
           "package_name": "com.example.book_libary"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyAVtPfE0rp7MHvHjr6ZfZYwLiaUMRzLa6s"
+          "current_key": "AIzaSyC_TwjdcWyki5bLt7LHtt-KP5SBYuHGaME"
         }
       ],
       "services": {
