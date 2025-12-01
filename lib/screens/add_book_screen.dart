@@ -39,7 +39,6 @@ class _AddBookScreenState extends State<AddBookScreen> {
     });
 
     try {
-      // إنشاء ID تلقائي للكتاب
       final bookId = DateTime.now().millisecondsSinceEpoch.toString();
 
       final book = Book(
@@ -55,7 +54,7 @@ class _AddBookScreenState extends State<AddBookScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('تم إضافة الكتاب بنجاح!'),
+            content: Text('Book added successfully!'),
             backgroundColor: Colors.green,
           ),
         );
@@ -64,7 +63,10 @@ class _AddBookScreenState extends State<AddBookScreen> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('حدث خطأ: $e'), backgroundColor: Colors.red),
+          SnackBar(
+            content: Text('An error occurred: $e'),
+            backgroundColor: Colors.red,
+          ),
         );
       }
     } finally {
@@ -79,7 +81,7 @@ class _AddBookScreenState extends State<AddBookScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('إضافة كتاب جديد')),
+      appBar: AppBar(title: const Text('Add New Book')),
       body: SafeArea(
         child: BubblesBackground(
           child: SingleChildScrollView(
@@ -93,13 +95,13 @@ class _AddBookScreenState extends State<AddBookScreen> {
                   TextFormField(
                     controller: _authorController,
                     decoration: const InputDecoration(
-                      labelText: 'اسم المؤلف',
-                      hintText: 'أدخل اسم المؤلف',
+                      labelText: 'Author Name',
+                      hintText: 'Enter author name',
                       border: OutlineInputBorder(),
                     ),
                     validator: (value) {
                       if (value == null || value.trim().isEmpty) {
-                        return 'يرجى إدخال اسم المؤلف';
+                        return 'Please enter author name';
                       }
                       return null;
                     },
@@ -108,14 +110,14 @@ class _AddBookScreenState extends State<AddBookScreen> {
                   TextFormField(
                     controller: _descriptionController,
                     decoration: const InputDecoration(
-                      labelText: 'الوصف',
-                      hintText: 'أدخل وصف الكتاب',
+                      labelText: 'Description',
+                      hintText: 'Enter book description',
                       border: OutlineInputBorder(),
                     ),
                     maxLines: 4,
                     validator: (value) {
                       if (value == null || value.trim().isEmpty) {
-                        return 'يرجى إدخال وصف الكتاب';
+                        return 'Please enter book description';
                       }
                       return null;
                     },
@@ -124,17 +126,17 @@ class _AddBookScreenState extends State<AddBookScreen> {
                   TextFormField(
                     controller: _imageUrlController,
                     decoration: const InputDecoration(
-                      labelText: 'رابط الصورة',
+                      labelText: 'Image URL',
                       hintText: 'https://example.com/image.jpg',
                       border: OutlineInputBorder(),
                     ),
                     validator: (value) {
                       if (value == null || value.trim().isEmpty) {
-                        return 'يرجى إدخال رابط الصورة';
+                        return 'Please enter image URL';
                       }
                       final uri = Uri.tryParse(value.trim());
                       if (uri == null || !uri.hasScheme) {
-                        return 'يرجى إدخال رابط صحيح';
+                        return 'Please enter a valid URL';
                       }
                       return null;
                     },
@@ -143,23 +145,23 @@ class _AddBookScreenState extends State<AddBookScreen> {
                   TextFormField(
                     controller: _pdfUrlController,
                     decoration: const InputDecoration(
-                      labelText: 'رابط PDF',
+                      labelText: 'PDF URL',
                       hintText: 'https://example.com/book.pdf',
                       border: OutlineInputBorder(),
                     ),
                     validator: (value) {
                       if (value == null || value.trim().isEmpty) {
-                        return 'يرجى إدخال رابط PDF';
+                        return 'Please enter PDF URL';
                       }
                       if (!Uri.tryParse(value.trim())!.hasScheme) {
-                        return 'يرجى إدخال رابط صحيح';
+                        return 'Please enter a valid URL';
                       }
                       return null;
                     },
                   ),
                   const SizedBox(height: 24),
                   PrimaryButton(
-                    label: _isLoading ? 'جاري الإضافة...' : 'إضافة الكتاب',
+                    label: _isLoading ? 'Adding...' : 'Add Book',
                     onPressed: _isLoading ? null : _addBook,
                   ),
                 ],

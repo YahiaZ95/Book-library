@@ -99,7 +99,7 @@ class HomeScreen extends StatelessWidget {
           Navigator.pushNamed(context, AppRoutes.addBook);
         },
         child: const Icon(Icons.add),
-        tooltip: 'إضافة كتاب جديد',
+        tooltip: 'Add New Book',
       ),
     );
   }

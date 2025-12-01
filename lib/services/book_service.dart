@@ -5,20 +5,23 @@ class BookService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final String _collectionName = 'books';
 
-  // جلب جميع الكتب
   Stream<List<Book>> getBooks() {
     return _firestore
         .collection(_collectionName)
         .snapshots()
-        .map((snapshot) => snapshot.docs
-            .map((doc) => Book.fromFirestore(doc.data(), doc.id))
-            .toList());
+        .map(
+          (snapshot) => snapshot.docs
+              .map((doc) => Book.fromFirestore(doc.data(), doc.id))
+              .toList(),
+        );
   }
 
-  // جلب كتاب واحد حسب ID
   Future<Book?> getBookById(String bookId) async {
     try {
-      final doc = await _firestore.collection(_collectionName).doc(bookId).get();
+      final doc = await _firestore
+          .collection(_collectionName)
+          .doc(bookId)
+          .get();
       if (doc.exists) {
         return Book.fromFirestore(doc.data()!, doc.id);
       }
@@ -29,7 +32,6 @@ class BookService {
     }
   }
 
-  // إضافة كتاب جديد
   Future<void> addBook(Book book) async {
     try {
       await _firestore
@@ -42,7 +44,6 @@ class BookService {
     }
   }
 
-  // تحديث كتاب
   Future<void> updateBook(Book book) async {
     try {
       await _firestore
@@ -55,7 +56,6 @@ class BookService {
     }
   }
 
-  // حذف كتاب
   Future<void> deleteBook(String bookId) async {
     try {
       await _firestore.collection(_collectionName).doc(bookId).delete();
@@ -65,4 +65,3 @@ class BookService {
     }
   }
 }
-

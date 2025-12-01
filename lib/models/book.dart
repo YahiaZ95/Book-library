@@ -13,7 +13,6 @@ class Book {
     required this.pdfUrl,
   });
 
-  // إنشاء Book من Map (من Firebase)
   factory Book.fromFirestore(Map<String, dynamic> data, String id) {
     return Book(
       id: id,
@@ -24,7 +23,6 @@ class Book {
     );
   }
 
-  // تحويل Book إلى Map (لإرسال إلى Firebase)
   Map<String, dynamic> toFirestore() {
     return {
       'author': author,
@@ -34,4 +32,3 @@ class Book {
     };
   }
 }
-
