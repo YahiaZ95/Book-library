@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import '../widgets/background_bubbles.dart';
 import '../widgets/primary_button.dart';
 import '../models/book.dart';
@@ -29,43 +30,60 @@ class DetailsScreen extends StatelessWidget {
               children: [
                 ClipRRect(
                   borderRadius: BorderRadius.circular(16),
-                  child: book.imageUrl.isNotEmpty
-                      ? Image.network(
-                          book.imageUrl,
-                          height: 220,
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) =>
-                              Container(
-                                height: 220,
-                                color: Colors.grey.shade600,
-                                alignment: Alignment.center,
-                                child: const Text(
-                                  'Book image',
-                                  style: TextStyle(color: Colors.white70),
-                                ),
-                              ),
-                          loadingBuilder: (context, child, loadingProgress) {
-                            if (loadingProgress == null) return child;
-                            return Container(
-                              height: 220,
-                              color: Colors.grey.shade600,
-                              alignment: Alignment.center,
-                              child: const CircularProgressIndicator(
-                                color: Colors.white70,
-                              ),
-                            );
-                          },
-                        )
-                      : Container(
-                          height: 220,
-                          color: Colors.grey.shade600,
-                          alignment: Alignment.center,
-                          child: const Icon(
-                            Icons.book,
-                            size: 80,
-                            color: Colors.white70,
+                  child:
+                      (book.imageUrl.isNotEmpty
+                              ? Image.network(
+                                  book.imageUrl,
+                                  height: 220,
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (context, error, stackTrace) =>
+                                      Container(
+                                        height: 220,
+                                        color: Colors.grey.shade600,
+                                        alignment: Alignment.center,
+                                        child: const Text(
+                                          'Book image',
+                                          style: TextStyle(
+                                            color: Colors.white70,
+                                          ),
+                                        ),
+                                      ),
+                                  loadingBuilder:
+                                      (context, child, loadingProgress) {
+                                        if (loadingProgress == null)
+                                          return child;
+                                        return Container(
+                                          height: 220,
+                                          color: Colors.grey.shade600,
+                                          alignment: Alignment.center,
+                                          child:
+                                              const CircularProgressIndicator(
+                                                color: Colors.white70,
+                                              ),
+                                        );
+                                      },
+                                )
+                              : Container(
+                                  height: 220,
+                                  color: Colors.grey.shade600,
+                                  alignment: Alignment.center,
+                                  child: const Icon(
+                                    Icons.book,
+                                    size: 80,
+                                    color: Colors.white70,
+                                  ),
+                                ))
+                          .animate()
+                          .fadeIn(
+                            duration: const Duration(milliseconds: 600),
+                            delay: const Duration(milliseconds: 100),
+                          )
+                          .slideY(
+                            begin: 0.1,
+                            end: 0,
+                            duration: const Duration(milliseconds: 600),
+                            delay: const Duration(milliseconds: 100),
                           ),
-                        ),
                 ),
                 const SizedBox(height: 16),
                 Container(

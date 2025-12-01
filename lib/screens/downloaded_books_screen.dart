@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
 class DownloadedBooksScreen extends StatelessWidget {
   const DownloadedBooksScreen({super.key});
@@ -23,7 +24,18 @@ class DownloadedBooksScreen extends StatelessWidget {
               Expanded(
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(16),
-                  child: Container(color: Colors.grey.shade700),
+                  child: Container(color: Colors.grey.shade700)
+                      .animate()
+                      .fadeIn(
+                        duration: const Duration(milliseconds: 500),
+                        delay: Duration(milliseconds: index * 50),
+                      )
+                      .slideY(
+                        begin: 0.1,
+                        end: 0,
+                        duration: const Duration(milliseconds: 500),
+                        delay: Duration(milliseconds: index * 50),
+                      ),
                 ),
               ),
               const SizedBox(height: 8),

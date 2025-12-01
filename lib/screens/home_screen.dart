@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import '../widgets/background_bubbles.dart';
 import '../app.dart';
 import '../models/book.dart';
@@ -79,6 +80,7 @@ class HomeScreen extends StatelessWidget {
                         itemCount: books.length,
                         itemBuilder: (context, index) => _BookCard(
                           book: books[index],
+                          index: index,
                           onTap: () => Navigator.pushNamed(
                             context,
                             AppRoutes.details,
@@ -107,8 +109,13 @@ class HomeScreen extends StatelessWidget {
 
 class _BookCard extends StatelessWidget {
   final Book book;
+  final int index;
   final VoidCallback onTap;
-  const _BookCard({required this.book, required this.onTap});
+  const _BookCard({
+    required this.book,
+    required this.index,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -120,33 +127,50 @@ class _BookCard extends StatelessWidget {
           Expanded(
             child: ClipRRect(
               borderRadius: BorderRadius.circular(16),
-              child: book.imageUrl.isNotEmpty
-                  ? Image.network(
-                      book.imageUrl,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) => Container(
-                        color: Colors.grey.shade700,
-                        child: const Icon(
-                          Icons.image_not_supported,
-                          color: Colors.white70,
-                        ),
+              child:
+                  (book.imageUrl.isNotEmpty
+                          ? Image.network(
+                              book.imageUrl,
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) =>
+                                  Container(
+                                    color: Colors.grey.shade700,
+                                    child: const Icon(
+                                      Icons.image_not_supported,
+                                      color: Colors.white70,
+                                    ),
+                                  ),
+                              loadingBuilder:
+                                  (context, child, loadingProgress) {
+                                    if (loadingProgress == null) return child;
+                                    return Container(
+                                      color: Colors.grey.shade700,
+                                      child: const Center(
+                                        child: CircularProgressIndicator(
+                                          color: Colors.white70,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                            )
+                          : Container(
+                              color: Colors.grey.shade700,
+                              child: const Icon(
+                                Icons.book,
+                                color: Colors.white70,
+                              ),
+                            ))
+                      .animate()
+                      .fadeIn(
+                        duration: const Duration(milliseconds: 500),
+                        delay: Duration(milliseconds: index * 50),
+                      )
+                      .slideY(
+                        begin: 0.1,
+                        end: 0,
+                        duration: const Duration(milliseconds: 500),
+                        delay: Duration(milliseconds: index * 50),
                       ),
-                      loadingBuilder: (context, child, loadingProgress) {
-                        if (loadingProgress == null) return child;
-                        return Container(
-                          color: Colors.grey.shade700,
-                          child: const Center(
-                            child: CircularProgressIndicator(
-                              color: Colors.white70,
-                            ),
-                          ),
-                        );
-                      },
-                    )
-                  : Container(
-                      color: Colors.grey.shade700,
-                      child: const Icon(Icons.book, color: Colors.white70),
-                    ),
             ),
           ),
           const SizedBox(height: 8),
