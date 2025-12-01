@@ -9,6 +9,7 @@ import 'screens/details_screen.dart';
 import 'screens/change_password_screen.dart';
 import 'screens/language_screen.dart';
 import 'screens/downloaded_books_screen.dart';
+import 'screens/add_book_screen.dart';
 
 class AppRoutes {
   static const String start = '/';
@@ -21,6 +22,7 @@ class AppRoutes {
   static const String changePassword = '/change-password';
   static const String language = '/language';
   static const String downloads = '/downloads';
+  static const String addBook = '/add-book';
 }
 
 class AppRouter {
@@ -39,13 +41,18 @@ class AppRouter {
       case AppRoutes.settings:
         return MaterialPageRoute(builder: (_) => const SettingsScreen());
       case AppRoutes.details:
-        return MaterialPageRoute(builder: (_) => const DetailsScreen());
+        return MaterialPageRoute(
+          builder: (_) => const DetailsScreen(),
+          settings: settings,
+        );
       case AppRoutes.changePassword:
         return MaterialPageRoute(builder: (_) => const ChangePasswordScreen());
       case AppRoutes.language:
         return MaterialPageRoute(builder: (_) => const LanguageScreen());
       case AppRoutes.downloads:
         return MaterialPageRoute(builder: (_) => const DownloadedBooksScreen());
+      case AppRoutes.addBook:
+        return MaterialPageRoute(builder: (_) => const AddBookScreen());
       default:
         return MaterialPageRoute(
           builder: (_) =>
