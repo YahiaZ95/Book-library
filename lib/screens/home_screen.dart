@@ -58,11 +58,9 @@ class HomeScreen extends StatelessWidget {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const Center(child: CircularProgressIndicator());
                       }
-
                       if (snapshot.hasError) {
                         return Center(child: Text('Error: ${snapshot.error}'));
                       }
-
                       if (!snapshot.hasData || snapshot.data!.isEmpty) {
                         return const Center(child: Text('No books available'));
                       }
@@ -75,18 +73,20 @@ class HomeScreen extends StatelessWidget {
                               crossAxisCount: 2,
                               mainAxisSpacing: 12,
                               crossAxisSpacing: 12,
-                              childAspectRatio: .72,
+                              childAspectRatio: 0.72,
                             ),
                         itemCount: books.length,
-                        itemBuilder: (context, index) => _BookCard(
-                          book: books[index],
-                          index: index,
-                          onTap: () => Navigator.pushNamed(
-                            context,
-                            AppRoutes.details,
-                            arguments: books[index],
-                          ),
-                        ),
+                        itemBuilder: (context, index) {
+                          return BookCard(
+                            book: books[index],
+                            index: index,
+                            onTap: () => Navigator.pushNamed(
+                              context,
+                              AppRoutes.details,
+                              arguments: books[index],
+                            ),
+                          );
+                        },
                       );
                     },
                   ),
@@ -107,70 +107,72 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-class _BookCard extends StatelessWidget {
+class BookCard extends StatefulWidget {
   final Book book;
   final int index;
   final VoidCallback onTap;
-  const _BookCard({
+
+  const BookCard({
     required this.book,
     required this.index,
     required this.onTap,
   });
 
   @override
+  State<BookCard> createState() => _BookCardState();
+}
+
+class _BookCardState extends State<BookCard> {
+  bool _animate = false;
+
+  @override
+  void initState() {
+    super.initState();
+    // تأخير بسيط حسب الـ index لكل بطاقة
+    Future.delayed(Duration(milliseconds: widget.index * 100), () {
+      if (mounted) {
+        setState(() {
+          _animate = true;
+        });
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: widget.onTap,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Expanded(
             child: ClipRRect(
               borderRadius: BorderRadius.circular(16),
-              child:
-                  (book.imageUrl.isNotEmpty
-                          ? Image.network(
-                              book.imageUrl,
-                              fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) =>
-                                  Container(
-                                    color: Colors.grey.shade700,
-                                    child: const Icon(
-                                      Icons.image_not_supported,
-                                      color: Colors.white70,
-                                    ),
-                                  ),
-                              loadingBuilder:
-                                  (context, child, loadingProgress) {
-                                    if (loadingProgress == null) return child;
-                                    return Container(
-                                      color: Colors.grey.shade700,
-                                      child: const Center(
-                                        child: CircularProgressIndicator(
-                                          color: Colors.white70,
-                                        ),
-                                      ),
-                                    );
-                                  },
-                            )
-                          : Container(
-                              color: Colors.grey.shade700,
-                              child: const Icon(
-                                Icons.book,
-                                color: Colors.white70,
-                              ),
-                            ))
-                      .animate()
-                      .fadeIn(
-                        duration: const Duration(milliseconds: 500),
-                        delay: Duration(milliseconds: index * 50),
-                      )
-                      .slideY(
-                        begin: 0.1,
-                        end: 0,
-                        duration: const Duration(milliseconds: 500),
-                        delay: Duration(milliseconds: index * 50),
-                      ),
+              child: (_animate
+                  ? (widget.book.imageUrl.isNotEmpty
+                            ? Image.network(
+                                widget.book.imageUrl,
+                                fit: BoxFit.cover,
+                              )
+                            : Container(
+                                color: Colors.grey.shade700,
+                                child: const Icon(
+                                  Icons.book,
+                                  color: Colors.white70,
+                                ),
+                              ))
+                        .animate()
+                        .fadeIn(duration: 600.ms)
+                        .slideY(begin: 0.1, end: 0, duration: 600.ms)
+                  : (widget.book.imageUrl.isNotEmpty
+                        ? Image.network(widget.book.imageUrl, fit: BoxFit.cover)
+                        : Container(
+                            color: Colors.grey.shade700,
+                            child: const Icon(
+                              Icons.book,
+                              color: Colors.white70,
+                            ),
+                          ))),
             ),
           ),
           const SizedBox(height: 8),
@@ -184,13 +186,16 @@ class _BookCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  book.author,
+                  widget.book.author,
                   style: const TextStyle(fontWeight: FontWeight.bold),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 4),
-                Text('Read Book', style: TextStyle(color: Colors.black54)),
+                const Text(
+                  'Read Book',
+                  style: TextStyle(color: Colors.black54),
+                ),
               ],
             ),
           ),
